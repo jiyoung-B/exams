@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+
+    <style>
+      #joinfrm {
+        width: 320px;
+        justify-content: center;
+        margin: auto;
+      }
+      div {
+      }
+
+      div > div {
+        margin-bottom: 10px;
+        display: inline-flex;
+      }
+      label {
+        text-align: right;
+        width: 120px;
+        margin-right: 10px;
+      }
+      div div:last-child {
+        display: inline;
+        margin-left: 124px;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="joinfrm" class="container" return checkForm() >
+      <div>
+        <div>
+          <label>아이디</label>
+          <input>
+        </div>
+
+        <div>
+          <label>비밀번호</label>
+          <input>
+        </div>
+
+        <div>
+          <label>비밀번호확인</label>
+          <input>
+        </div>
+
+        <div>
+          <label>이름</label>
+          <input>
+        </div>
+
+        <div>
+          <label>이메일</label>
+          <input>
+        </div>
+
+        <div id="msg"></div>
+        <div></div>
+        <hr>
+
+        <div>
+          <button id="joinbtn" type="submit">입력완료</button>
+          <button id="resetbtn" type="reset">다시입력</button>
+        </div>
+      </div>
+    </form>
+
+    <script>
+
+      let joinfrm = document.joinfrm;
+
+      let userid = document.querySelector("userid");
+      let passwd = document.querySelector("passwd");
+      let repasswd = document.querySelector("repasswd");
+      let name = document.querySelector("name");
+      let email = document.querySelector("email");
+      let joinbtn = document.querySelector("joinbtn");
+      let msg = document.querySelector("msg");
+
+      let req = new XMLHttpRequest();
+      let setUserId = (uid) => {
+
+        console.log(userid.value);
+
+
+      }
+
+      joinbtn.addEventListener("submit", (e) => {
+        let txt = '입력해주세요'
+
+        req.onreadystatechange = () => {
+
+          if (req.readyState == 4 && req.status == 200) {
+            setUserId(userid.value);
+            console.log(setUserId(userid.value));
+            console.log(req.responseText);
+            e.preventDefault();
+            e.stopPropagation();
+            //
+          } else {
+            msg.createTextNode(txt);
+            console.log(req.readyState, req.status);
+          }
+
+          req.open("post", "joinok.jsp");
+          req.send();
+        };
+      });
+
+
+    </script>
+  </body>
+</html>
