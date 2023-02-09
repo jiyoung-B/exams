@@ -26,68 +26,91 @@
         display: inline;
         margin-left: 124px;
       }
+      .msg {color: red;}
     </style>
   </head>
   <body>
-    <form id="joinfrm" class="container" return checkForm() >
+    <form name="joinfrm" class="container" onsubmit="return checkForm()"> <!--id 말고 name으로 지정-->
       <div>
         <div>
           <label>아이디</label>
-          <input>
+          <input name="userid">
         </div>
 
         <div>
           <label>비밀번호</label>
-          <input>
+          <input name="passwd">
         </div>
 
         <div>
           <label>비밀번호확인</label>
-          <input>
+          <input name="repasswd">
         </div>
 
         <div>
           <label>이름</label>
-          <input>
+          <input name="name">
         </div>
 
         <div>
           <label>이메일</label>
-          <input>
+          <input name="email">
         </div>
 
-        <div id="msg"></div>
-        <div></div>
+        <hr>
+        <div id="msg" class="msg"></div>
         <hr>
 
         <div>
-          <button id="joinbtn" type="submit">입력완료</button>
+          <button id="joinbtn1" type="button">입력완료click</button>
+          <button id="joinbtn2" type="submit">입력완료submit</button>
           <button id="resetbtn" type="reset">다시입력</button>
         </div>
       </div>
     </form>
 
     <script>
+      // 문제 다시보기: 폼 validation!
+      let joinfrm = document.joinfrm; //document.폼이름
 
-      let joinfrm = document.joinfrm;
-
-      let userid = document.querySelector("userid");
-      let passwd = document.querySelector("passwd");
-      let repasswd = document.querySelector("repasswd");
-      let name = document.querySelector("name");
-      let email = document.querySelector("email");
-      let joinbtn = document.querySelector("joinbtn");
-      let msg = document.querySelector("msg");
+      let userid = document.querySelector("#userid");
+      let passwd = document.querySelector("#passwd");
+      let repasswd = document.querySelector("#repasswd");
+      let name = document.querySelector("#name");
+      let email = document.querySelector("#email");
+      let joinbtn1 = document.querySelector("#joinbtn1");
+      let joinbtn2 = document.querySelector("#joinbtn2");
+      let msg = document.querySelector("#msg");
 
       let req = new XMLHttpRequest();
-      let setUserId = (uid) => {
+      // let setUserId = (uid) => {
+      //   console.log(userid.value);
+      //
+      // }
 
-        console.log(userid.value);
-
-
-      }
-
-      joinbtn.addEventListener("submit", (e) => {
+// type="button"
+      joinbtn1.addEventListener('click', () => { // 타입이 버튼일때! 메세지가 계속 떠있음!!
+        msg.textContent = '';
+        if(joinfrm.userid.value == '') // **id로 querySelector 지정하고 name으로 addEventListener 값 가져요기!!
+          msg.textContent = '아이디를 입력하세요';
+        else if (joinfrm.passwd.value == '')
+          msg.textContent = '비밀번호를 입력하세요';
+        else if (joinfrm.repasswd.value == '')
+          msg.textContent = '비밀번호 확인을 입력하세요';
+        else if (joinfrm.name.value == '')
+          msg.textContent = '이름을 입력하세요';
+        else if (joinfrm.email.value == '')
+          msg.textContent = '이메일을 입력하세요';
+        else if (joinfrm.passwd.value != joinfrm.repasswd.value)
+          msg.textContent = '비밀번호가 일치하지 않습니다';
+        else{
+          joinfrm.method = 'post';
+          joinfrm.action = 'server.jsp';
+          joinfrm.submit();
+        }
+      });
+// type="submit"
+      joinbtn2.addEventListener("submit", () => {
         let txt = '입력해주세요'
 
         req.onreadystatechange = () => {
@@ -109,7 +132,46 @@
         };
       });
 
+      let checkForm = (e) => {
+        msg.textContent = '';
+        if (joinfrm.userid.value == '') {
+          msg.textContent = '아이디 입력';
+          return false;
+        } else if (joinfrm.repasswd.value == '') {
+          msg.textContent = '비밀번호 확인';
+          e.preventDefault();
+        } else if (joinfrm.name.value == '') {
+          msg.textContent = '이름 입력';
+          e.preventDefault();
+        } else if (joinfrm.email.value == '') {
+          msg.textContent = '이메일 입력';
+          e.preventDefault();
+        } else if (joinfrm.passwd.value != joinfrm.repasswd.value) {
+          msg.textContent = '비밀번호가 일치하지 않음';
+          e.preventDefault();
+        } else {
+          joinfrm.method = 'post';
+          joinfrm.action = '';
+          e.stopPropagation();
+          return true;
+        }
+      }
+
+      joinbtn2.addEventListener('click', (e) => { // 버튼 타입이 button 이든 submit 이든 동작은  'click'!!
+        checkForm(e);
+      });
 
     </script>
+
+    <!--// 문제 다시보기: window 창 새로 띄우고, 350*350 크기로 만들기!-->
+    <button type="button" onclick="makewin()">새창 띄우기</button>
+    <script>
+      let makewin = () => {
+        window.open('https://google.com', null, 'width=350, height=300');
+      }
+    </script>
+
+
+
   </body>
 </html>
